@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App Meme</title>
+    <link rel="stylesheet" type="text/css" href="public/css/ts/tailwind.css" media="screen"/>
+    <script type="text/javascript" src="public/scripts/vue.js"></script>
+
+    
+</head>
+<body>
+    <div id="app" class="">
+    
+        <div id="side-bar" :class="sideBarCSS">
+            <div>
+                <p :class="statusCSS">{{ statusText }}</p>
+                <div></div>
+            </div>
+            <!-- Settings -->
+            <div class="float-left">
+                <div class="bg-blue-100 m-2 p-2">
+                    <h2>People</h2>
+                    <div>
+                        <p><input type="text" v-model="newPersonName" ><span v-on:click="addPerson" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Add Person</span></p>
+                    </div>
+                    <div v-for="person in people">
+                        <div>
+                            <p>{{ person.personName }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-100 m-2 p-2">
+                    <h2>Chat Theme</h2>
+                    <div>
+                        <p>Show Battery <input type="checkbox" v-model="batteryOptions.batteryShow" /></p>
+                        <p>Battery Percentage <input type="text" v-model="batteryOptions.batteryPercentage" /></p>
+                        <p>Show Chat Title <input type="checkbox" v-model="chatOptions.chatTitleShow" /></p>
+                        <p>Chat Title <input type="text" v-model="chatOptions.chatTitle" /></p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!-- EDITOR -->
+            <div class="float-left bg-blue-100 m-2 p-2">
+                <h2>Messages</h2>
+                <div class="mb-2">
+                    <p>
+                        <select id="peopleNames" v-model="selectedPerson">
+                            <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
+                        </select>
+                        <span v-on:click="addMessage" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Add Message</span>
+                        <span v-on:click="clearAllMessages" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Clear All</span>
+                    </p>
+                </div>
+                <div>
+                    <div class="mb-2 p-1" v-for="message in messages">
+                        <p>
+                            <input type="text" v-model="message.message" class="border-blue-300"/>
+                        </p>
+                        <p>
+                            <input type="text" v-model="message.personName"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-on:click="toggleSideBar" class="bg-blue-500 cursor-pointer text-white float-left p-2 m-1 rounded h-screen">
+            <p>{{ sideBarText  }}</p>
+        </div>
+
+        <div class="float-left flex">
+            <div class="flex-auto bg-green-400">
+                <!-- CHAT APP -->
+                <div class="bg-white m-2 p-2 border-gray-100 bg-red-100">
+                    <div>
+                        <div>
+                            <h2 class="">{{ chatOptions.chatTitle }}</h2>
+                        </div>
+                    </div>
+                    <div v-for="message in messages">
+                        <div class="bg-blue-400 text-white rounded m-2 p-4 ">
+                            <div>
+                                {{ message.personName}}
+                            </div>
+                            <div>
+                                {{ message.message }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        mounted() {
+            this.preload();
+        }, 
+        data: {
+            newPersonName: "",
+            people: [],
+            messages: [],
+            sideBarCSS: "block",
+            sideBarText: "<<",
+            messageLastIndex: 0,
+            selectedPerson: {
+                personName: ""
+            },
+            statusCSS: "none",
+            statusText: "",
+            batteryOptions: {
+                batteryShow: true,
+                batteryPercentage: "100"
+            },
+            chatOptions: {
+                chatTitleShow: true,
+                chatTitle: "Group Chat"
+            },
+        },
+        methods: {
+            preload: function(event) {
+                this.newPersonName = "Peter";
+                this.addPerson();
+
+                this.newPersonName = "Jane";
+                this.addPerson();
+
+                this.newPersonName = "";
+            },
+            addPerson: function(event) {
+                if (this.newPersonName === "") {
+                    this.timedStatus("Please enter a name.", "bg-red-600 text-white rounded p-2 m-2");
+                    return;
+                }
+  
+                const person = this.createNewPerson(this.newPersonName);
+                this.people.push(person);
+                this.newPersonName = "";
+            },
+            createNewPerson: function(name) {
+                const obj = {
+                    personName: name,
+                    theme: {
+                        background: "bg-blue-400",
+                        foreground: "text-white" 
+                    },
+                    profilePicture: "" 
+                };
+
+                return obj;
+            },
+            addMessage: function(event) {
+                const obj = {
+                    message: "",
+                    messageIndex: this.messageLastIndex,
+                    personName: this.selectedPerson.personName
+                };
+
+                this.messages.push(obj);
+                this.messageLastIndex = this.messageLastIndex + 1;
+            },
+            clearAllMessages: function(event) {
+                this.messages = [];
+                this.messageLastIndex = 0;
+            },
+            toggleSideBar: function(event) {
+                let cssName = "block";
+                let cssText = "<<";
+
+                if (this.sideBarCSS == "block") {
+                    cssName = "hidden";
+                    cssText = ">>";
+                }
+
+                this.sideBarCSS = cssName;
+                this.sideBarText = cssText;
+            },
+            timedStatus: function(text,css) {
+                this.statusCSS = css;
+                this.statusText = text;
+
+                setTimeout(()=>{
+                    this.statusCSS = "";
+                    this.statusText = "";
+                },5000);
+            }
+        },
+        computed: {
+            orderedPeople: function() {
+                return this.people.sort((a,b) => {
+                    if(a.personName < b.personName) return -1;
+                    if(a.personName > b.personName) return 1;
+                    return 0;
+                });
+            }
+        }
+    });
+</script>
+</html>

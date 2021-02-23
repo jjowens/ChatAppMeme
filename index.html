@@ -43,7 +43,7 @@
                             <input type="text" v-model="message.personName"/>
                         </p>
                         <p>
-                            <select id="peopleNames" v-model="message">
+                            <select id="peopleNames">
                                 <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
                             </select>
                         </p>
@@ -70,30 +70,31 @@
         </div>
 
         <div class="float-left flex">
-            <div class="flex-grow bg-green-400">
+            <div class="bg-green-400">
                 <!-- CHAT APP -->
                 <div class="bg-white m-2 p-2 border-gray-100 bg-red-100">
-                    <div>
-                        <div>
+                    <div class="flex bg-yellow-400">
+                        <div class="flex-grow">
+                            <p>Test</p>
+                        </div>
+                        <div class="flex-grow">
                             <h2>{{ chatOptions.chatTitle }}</h2>
                         </div>
-                        <div class="clear-both"></div>
+                        <div class="flex-grow">
+                            <p>{{ batteryOptions.batteryPercentage }}%</p>
+                        </div>
                     </div>
+                    <div class="clear-both"></div>
                     <div v-for="message in messages">
-                        <div>
-                            <div>
-                                <p>{{ message.person.personName}}<br/>
-                                    {{ message.person.backgroundColour.colourValue }}<br/>
-                                    {{ message.person.foregroundColour.colourValue }}<br/>
-                                </p>
-
+                        <div :class="[ message.person.backgroundColour.colourValue,message.person.foregroundColour.colourValue]" class="rounded p-2 w-6/12">
+                            <div class="float-left">
+                                <p>{{ message.personName}}<br/></p>
                             </div>
-                            <div>
-                               {{ message.message }}
+                            <div class="float-left">
+                               {{ message.message }}<br/>
+                               {{ message }}
                             </div>
-                            <div>
-                                {{ message }}
-                             </div>
+                            <div class="clear-both"></div>
                         </div>
                     </div>
                 </div>

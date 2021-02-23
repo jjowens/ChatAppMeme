@@ -38,43 +38,42 @@
                         <div>
                             <p>{{ person.personName }}</p>
                         </div>
-                        <div>
+                        
                     </div>
-                </div>
 
             </div>
+        </div>
 
-            <!-- EDITOR -->
-            <div class="float-left editor-widget">
-                <h2>Messages</h2>
-                <div class="mb-2">
+        <!-- EDITOR -->
+        <div class="float-left editor-widget">
+            <h2>Messages</h2>
+            <div class="mb-2">
+                <p>
+                    <select id="peopleNames" v-model="selectedPerson">
+                        <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
+                    </select>
+                    <span v-on:click="addMessage" class="editor-button">Add Message</span>
+                    <span v-on:click="clearAllMessages" class="editor-button">Clear All</span>
+                </p>
+            </div>
+            <div>
+                <div class="mb-2 p-1" v-for="message in messages">
                     <p>
-                        <select id="peopleNames" v-model="selectedPerson">
+                        <input type="text" v-model="message.message" class="border-blue-300"/>
+                    </p>
+                    <p>
+                        <input type="text" v-model="message.personName"/>
+                    </p>
+                    <p>
+                        <select id="peopleNames" v-model="message">
                             <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
                         </select>
-                        <span v-on:click="addMessage" class="editor-button">Add Message</span>
-                        <span v-on:click="clearAllMessages" class="editor-button">Clear All</span>
                     </p>
                 </div>
-                <div>
-                    <div class="mb-2 p-1" v-for="message in messages">
-                        <p>
-                            <input type="text" v-model="message.message" class="border-blue-300"/>
-                        </p>
-                        <p>
-                            <input type="text" v-model="message.personName"/>
-                        </p>
-                        <p>
-                            <select id="peopleNames" v-model="message">
-                                <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
-                            </select>
-                        </p>
-                    </div>
-                </div>
             </div>
-
-            
         </div>
+    </div>
+       
         <div v-on:click="toggleSideBar" class="bg-blue-500 cursor-pointer text-white float-left p-2 m-1 rounded h-screen">
             <p>{{ sideBarText  }}</p>
         </div>
@@ -84,19 +83,9 @@
                 <!-- CHAT APP -->
                 <div class="bg-white m-2 p-2 border-gray-100 bg-red-100">
                     <div>
-                        <div class="float-left mr-2">
-                            <h2 class="">{{ chatOptions.chatTitle }}</h2>
+                        <div>
+                            <h2>{{ chatOptions.chatTitle }}</h2>
                         </div>
-
-                        <div class="float-right">
-                            <div class="border-solid border-black border-2 w-9 h-3">
-                                <div style="background-color: greenyellow;">
-                                    &nbsp;
-                                </div>
-                                <div class="clear-both"></div>
-                            </div>
-                        </div>
-
                         <div class="clear-both"></div>
                     </div>
                     <div v-for="message in messages">

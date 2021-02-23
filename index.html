@@ -5,55 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App Meme</title>
-    <link rel="stylesheet" type="text/css" href="public/css/ts/tailwind.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ts/ts.css" media="screen"/>
     <script type="text/javascript" src="public/scripts/vue.js"></script>
-
-    
 </head>
 <body>
     <div id="app" class="">
+        <div class="m-2">
+            <div class="float-left mt-2">
+                <p><span v-on:click="toggleEditor" class="editor-button">Hide Editor</span></p>
+            </div>
+            <div class="float-left">
+                <p :class="statusCSS">{{ statusText }}</p>
+            </div>
+            <div class="clear-both"></div>
+        </div>
     
         <div id="side-bar" :class="sideBarCSS">
-            <div>
-                <p :class="statusCSS">{{ statusText }}</p>
-                <div></div>
-            </div>
-            <!-- Settings -->
-            <div class="float-left">
-                <div class="bg-blue-100 m-2 p-2">
-                    <h2>People</h2>
-                    <div>
-                        <p><input type="text" v-model="newPersonName" ><span v-on:click="addPerson" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Add Person</span></p>
-                    </div>
-                    <div v-for="person in people">
-                        <div>
-                            <p>{{ person.personName }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-blue-100 m-2 p-2">
-                    <h2>Chat Theme</h2>
-                    <div>
-                        <p>Show Battery <input type="checkbox" v-model="batteryOptions.batteryShow" /></p>
-                        <p>Battery Percentage <input type="text" v-model="batteryOptions.batteryPercentage" /></p>
-                        <p>Show Chat Title <input type="checkbox" v-model="chatOptions.chatTitleShow" /></p>
-                        <p>Chat Title <input type="text" v-model="chatOptions.chatTitle" /></p>
-                    </div>
-                </div>
-            </div>
-
             
             <!-- EDITOR -->
-            <div class="float-left bg-blue-100 m-2 p-2">
+            <div class="float-left editor-widget">
                 <h2>Messages</h2>
                 <div class="mb-2">
                     <p>
                         <select id="peopleNames" v-model="selectedPerson">
                             <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
                         </select>
-                        <span v-on:click="addMessage" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Add Message</span>
-                        <span v-on:click="clearAllMessages" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Clear All</span>
+                        <span v-on:click="addMessage" class="editor-button">Add Message</span>
+                        <span v-on:click="clearAllMessages" class="editor-button">Clear All</span>
                     </p>
                 </div>
                 <div>
@@ -64,41 +42,101 @@
                         <p>
                             <input type="text" v-model="message.personName"/>
                         </p>
+                        <p>
+                            <select id="peopleNames">
+                                <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
+                            </select>
+                        </p>
+                        <div class="float-left">
+                            <p>Background</p>
+                            <div class="float-left">
+                                <select v-model="message.person.backgroundColour">
+                                    <option v-for="colour in orderedBackgroundColours" :value="colour" >{{ colour.colourName }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="clear-both"></div>
+                        <div class="float-left">
+                            <p>Colour</p>
+                            <div>
+                                <select v-model="message.person.foregroundColour"> 
+                                    <option v-for="colour in orderedColours" :value="colour">{{ colour.colourName }}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div v-on:click="toggleSideBar" class="bg-blue-500 cursor-pointer text-white float-left p-2 m-1 rounded h-screen">
-            <p>{{ sideBarText  }}</p>
         </div>
 
         <div class="float-left flex">
-            <div class="flex-auto bg-green-400">
+            <div class="bg-green-400">
                 <!-- CHAT APP -->
                 <div class="bg-white m-2 p-2 border-gray-100 bg-red-100">
-                    <div>
-                        <div>
-                            <h2 class="">{{ chatOptions.chatTitle }}</h2>
+                    <div class="flex bg-yellow-400">
+                        <div class="flex-grow">
+                            <p>Test</p>
+                        </div>
+                        <div class="flex-grow">
+                            <h2>{{ chatOptions.chatTitle }}</h2>
+                        </div>
+                        <div class="flex-grow">
+                            <p>{{ batteryOptions.batteryPercentage }}%</p>
                         </div>
                     </div>
+                    <div class="clear-both"></div>
                     <div v-for="message in messages">
-                        <div class="bg-blue-400 text-white rounded m-2 p-4 ">
-                            <div>
-                                {{ message.personName}}
+                        <div :class="[ message.person.backgroundColour.colourValue,message.person.foregroundColour.colourValue]" class="rounded p-2 w-6/12">
+                            <div class="float-left">
+                                <p>{{ message.personName}}<br/></p>
                             </div>
-                            <div>
-                                {{ message.message }}
+                            <div class="float-left">
+                               {{ message.message }}<br/>
+                               {{ message }}
                             </div>
+                            <div class="clear-both"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+
+        <!-- SIDEBAR SETTINGS -->
+        <div id="side-bar-settings" :class="sideBarCSS">
+            <!-- Settings -->
+            <div class="float-right">
+
+                <div class="editor-widget">
+                    <h2>Chat Theme</h2>
+                    <div>
+                        <p>Show Battery <input type="checkbox" v-model="batteryOptions.batteryShow" /></p>
+                        <p>Battery Percentage <input type="text" v-model="batteryOptions.batteryPercentage" /></p>
+                        <p>Show Chat Title <input type="checkbox" v-model="chatOptions.chatTitleShow" /></p>
+                        <p>Chat Title <input type="text" v-model="chatOptions.chatTitle" /></p>
+                    </div>
+                </div>
+
+                <div class="editor-widget">
+                    <h2>People</h2>
+                    <div>
+                        <p><input type="text" v-model="newPersonName" ><span v-on:click="addPerson" class="editor-button">Add Person</span></p>
+                    </div>
+                    <div v-for="person in people">
+                        <div>
+                            <p>{{ person.personName }}</p>
+                        </div>
+                    </div>
+                    <div class="clear-both"></div>
+            </div>
+        </div>
+
+        
     </div>
+
 </body>
 <script type="text/javascript">
-    var app = new Vue({
+    const app = new Vue({
         el: '#app',
         mounted() {
             this.preload();
@@ -108,7 +146,7 @@
             people: [],
             messages: [],
             sideBarCSS: "block",
-            sideBarText: "<<",
+            editorToggleText: "Hide Editor",
             messageLastIndex: 0,
             selectedPerson: {
                 personName: ""
@@ -123,6 +161,30 @@
                 chatTitleShow: true,
                 chatTitle: "Group Chat"
             },
+            themeBackgroundColours: [
+                {
+                    colourName: "blue",
+                    colourValue: "bg-blue-400"
+                },
+                {
+                    colourName: "green",
+                    colourValue: "bg-green-400"
+                },
+                {
+                    colourName: "gray",
+                    colourValue: "bg-gray-400"
+                },
+            ],
+            themeColours: [
+                {
+                    colourName: "black",
+                    colourValue: "text-black"
+                },
+                {
+                    colourName: "white",
+                    colourValue: "text-white"
+                }
+            ]
         },
         methods: {
             preload: function(event) {
@@ -136,7 +198,7 @@
             },
             addPerson: function(event) {
                 if (this.newPersonName === "") {
-                    this.timedStatus("Please enter a name.", "bg-red-600 text-white rounded p-2 m-2");
+                    this.timedStatus("Please enter a name.", "status-warning");
                     return;
                 }
   
@@ -147,20 +209,25 @@
             createNewPerson: function(name) {
                 const obj = {
                     personName: name,
-                    theme: {
-                        background: "bg-blue-400",
-                        foreground: "text-white" 
-                    },
-                    profilePicture: "" 
+                    backgroundColour: this.themeBackgroundColours[0],
+                    foregroundColour: this.themeColours[0],
+                    profilePicture: ""
                 };
 
                 return obj;
             },
             addMessage: function(event) {
+
+                if (this.selectedPerson.personName === "") {
+                    this.timedStatus("Please select a name.", "status-warning");
+                    return;
+                }
+
                 const obj = {
                     message: "",
                     messageIndex: this.messageLastIndex,
-                    personName: this.selectedPerson.personName
+                    personName: this.selectedPerson.personName,
+                    person: this.selectedPerson
                 };
 
                 this.messages.push(obj);
@@ -170,17 +237,17 @@
                 this.messages = [];
                 this.messageLastIndex = 0;
             },
-            toggleSideBar: function(event) {
+            toggleEditor: function(event) {
                 let cssName = "block";
-                let cssText = "<<";
+                let cssText = " ";
 
                 if (this.sideBarCSS == "block") {
                     cssName = "hidden";
-                    cssText = ">>";
+                    cssText = " ";
                 }
 
                 this.sideBarCSS = cssName;
-                this.sideBarText = cssText;
+                this.editorToggleText = cssText;
             },
             timedStatus: function(text,css) {
                 this.statusCSS = css;
@@ -197,6 +264,20 @@
                 return this.people.sort((a,b) => {
                     if(a.personName < b.personName) return -1;
                     if(a.personName > b.personName) return 1;
+                    return 0;
+                });
+            },
+            orderedBackgroundColours: function() {
+                return this.themeBackgroundColours.sort((a,b) => {
+                    if(a.colourName < b.colourName) return -1;
+                    if(a.colourName > b.colourName) return 1;
+                    return 0;
+                });
+            },
+            orderedColours: function() {
+                return this.themeColours.sort((a,b) => {
+                    if(a.colourName < b.colourName) return -1;
+                    if(a.colourName > b.colourName) return 1;
                     return 0;
                 });
             }

@@ -38,6 +38,7 @@
                         <div>
                             <p>{{ person.personName }}</p>
                         </div>
+                        <div>
                     </div>
                 </div>
 
@@ -64,7 +65,7 @@
                             <input type="text" v-model="message.personName"/>
                         </p>
                         <p>
-                            <select id="peopleNames" v-model="message.personName">
+                            <select id="peopleNames" v-model="message">
                                 <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
                             </select>
                         </p>
@@ -83,17 +84,28 @@
                 <!-- CHAT APP -->
                 <div class="bg-white m-2 p-2 border-gray-100 bg-red-100">
                     <div>
-                        <div>
+                        <div class="float-left mr-2">
                             <h2 class="">{{ chatOptions.chatTitle }}</h2>
                         </div>
+
+                        <div class="float-right">
+                            <div class="border-solid border-black border-2 w-9 h-3">
+                                <div style="background-color: greenyellow;">
+                                    &nbsp;
+                                </div>
+                                <div class="clear-both"></div>
+                            </div>
+                        </div>
+
+                        <div class="clear-both"></div>
                     </div>
                     <div v-for="message in messages">
                         <div class="bg-blue-400 text-white rounded m-2 p-4">
                             <div>
-                                Person Name {{ message.personName}}
+                                {{ message.personName}}
                             </div>
                             <div>
-                               Message {{ message.message }}
+                               {{ message.message }}
                             </div>
                         </div>
                     </div>

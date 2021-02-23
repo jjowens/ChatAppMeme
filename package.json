@@ -1,0 +1,26 @@
+{
+  "name": "chatappmeme",
+  "version": "1.0.0",
+  "description": "Editor for creating a Chat App for meme purposes",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"dev": "npx tailwindcss-cli@latest build ./src/tailwind.css -c ./config/tailwind.dev.config.js -o ./public/css/ts/ts.css",
+	"prod": "npx tailwindcss-cli@latest build ./src/tailwind.css -c ./config/tailwind.prod.config.js -o ./public/css/ts/ts.css"
+  },
+  "dependencies": {
+    "tailwindcss": "^2.0.3",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjowens/ChatAppMeme.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjowens/ChatAppMeme/issues"
+  },
+  "homepage": "https://github.com/jjowens/ChatAppMeme#readme"
+}

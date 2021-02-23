@@ -5,34 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App Meme</title>
-    <link rel="stylesheet" type="text/css" href="public/css/ts/tailwind.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="public/css/ts/ts.css" media="screen"/>
     <script type="text/javascript" src="public/scripts/vue.js"></script>
-
-    
 </head>
 <body>
     <div id="app" class="">
     
         <div id="side-bar" :class="sideBarCSS">
-            <div>
-                <p :class="statusCSS">{{ statusText }}</p>
-                <div></div>
-            </div>
             <!-- Settings -->
             <div class="float-left">
-                <div class="bg-blue-100 m-2 p-2">
-                    <h2>People</h2>
-                    <div>
-                        <p><input type="text" v-model="newPersonName" ><span v-on:click="addPerson" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Add Person</span></p>
-                    </div>
-                    <div v-for="person in people">
-                        <div>
-                            <p>{{ person.personName }}</p>
-                        </div>
-                    </div>
+                <div>
+                    <p :class="statusCSS">{{ statusText }}</p>
+                    <div></div>
                 </div>
 
-                <div class="bg-blue-100 m-2 p-2">
+                <div class="editor-widget">
                     <h2>Chat Theme</h2>
                     <div>
                         <p>Show Battery <input type="checkbox" v-model="batteryOptions.batteryShow" /></p>
@@ -41,19 +28,31 @@
                         <p>Chat Title <input type="text" v-model="chatOptions.chatTitle" /></p>
                     </div>
                 </div>
+
+                <div class="editor-widget">
+                    <h2>People</h2>
+                    <div>
+                        <p><input type="text" v-model="newPersonName" ><span v-on:click="addPerson" class="editor-button">Add Person</span></p>
+                    </div>
+                    <div v-for="person in people">
+                        <div>
+                            <p>{{ person.personName }}</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            
             <!-- EDITOR -->
-            <div class="float-left bg-blue-100 m-2 p-2">
+            <div class="float-left editor-widget">
                 <h2>Messages</h2>
                 <div class="mb-2">
                     <p>
                         <select id="peopleNames" v-model="selectedPerson">
                             <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
                         </select>
-                        <span v-on:click="addMessage" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Add Message</span>
-                        <span v-on:click="clearAllMessages" class="bg-blue-400 text-white p-2 rounded m-1 cursor-pointer">Clear All</span>
+                        <span v-on:click="addMessage" class="editor-button">Add Message</span>
+                        <span v-on:click="clearAllMessages" class="editor-button">Clear All</span>
                     </p>
                 </div>
                 <div>
@@ -64,9 +63,16 @@
                         <p>
                             <input type="text" v-model="message.personName"/>
                         </p>
+                        <p>
+                            <select id="peopleNames" v-model="message.personName">
+                                <option v-for="person in orderedPeople" :value="person">{{ person.personName }}</option>
+                            </select>
+                        </p>
                     </div>
                 </div>
             </div>
+
+            
         </div>
         <div v-on:click="toggleSideBar" class="bg-blue-500 cursor-pointer text-white float-left p-2 m-1 rounded h-screen">
             <p>{{ sideBarText  }}</p>
@@ -82,12 +88,12 @@
                         </div>
                     </div>
                     <div v-for="message in messages">
-                        <div class="bg-blue-400 text-white rounded m-2 p-4 ">
+                        <div class="bg-blue-400 text-white rounded m-2 p-4">
                             <div>
-                                {{ message.personName}}
+                                Person Name {{ message.personName}}
                             </div>
                             <div>
-                                {{ message.message }}
+                               Message {{ message.message }}
                             </div>
                         </div>
                     </div>
@@ -98,7 +104,7 @@
     </div>
 </body>
 <script type="text/javascript">
-    var app = new Vue({
+    const app = new Vue({
         el: '#app',
         mounted() {
             this.preload();

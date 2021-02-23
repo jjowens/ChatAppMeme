@@ -13,4 +13,8 @@
 	@apply bg-blue-300 p-1 rounded mb-2
 }
 
+. {
+	@apply bg-red-600 text-white rounded p-2
+}
+
 @tailwind utilities;

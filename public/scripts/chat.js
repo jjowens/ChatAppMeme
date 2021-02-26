@@ -179,8 +179,6 @@ const app = new Vue({
             },5000);
         },
         toggleEditMessage: function(obj) {
-            console.log(obj);
-
             let messageVisible = "";
             let editorVisible = "";
 
@@ -197,26 +195,18 @@ const app = new Vue({
 
         },
         deleteMessage: function(obj) {
-            console.log("Deleting message");
             if (obj === null) {
                 return;
             }
 
-            console.log(obj);
-            console.log("IndexOf ==" + this.messages.indexOf(obj) == -1);
-            console.log("IndexOf ===" + this.messages.indexOf(obj) === -1);
-
             this.messages[0].person.personName = "Jim Bob";
 
             if (this.messages.indexOf(obj) === -1) {
-                console.log("message not found");
                 return;
             } else {
                 let idx = this.messages.indexOf(obj);
 
                 this.messages.splice(idx, 1);
-
-                console.log("message deleted");
             }
 
         },

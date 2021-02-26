@@ -8,4 +8,5 @@ Type 'npm run prod' and it will create a new stylesheet combining from Tailwind 
 
 NPM commands can be viewed in package.json. The config files can be found in the config folder.
 
-
+## Editor
+All features of the chat app are editable. You can edit the title of chat group or edit any of the messages.

@@ -13,8 +13,12 @@
 	@apply bg-blue-300 p-1 rounded mb-2
 }
 
-. {
-	@apply bg-red-600 text-white rounded p-2
+.delete-button {
+	@apply rounded text-white bg-red-600 float-right p-2 cursor-pointer
+}
+
+.status-warning {
+	@apply rounded text-white bg-red-600 p-2
 }
 
 @tailwind utilities;
